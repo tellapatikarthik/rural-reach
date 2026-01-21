@@ -14,7 +14,216 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      appointments: {
+        Row: {
+          appointment_date: string
+          appointment_time: string
+          consultation_type: Database["public"]["Enums"]["consultation_type"]
+          created_at: string
+          doctor_id: string
+          id: string
+          notes: string | null
+          patient_id: string
+          room_id: string | null
+          status: Database["public"]["Enums"]["appointment_status"]
+          symptoms: string | null
+          updated_at: string
+        }
+        Insert: {
+          appointment_date: string
+          appointment_time: string
+          consultation_type?: Database["public"]["Enums"]["consultation_type"]
+          created_at?: string
+          doctor_id: string
+          id?: string
+          notes?: string | null
+          patient_id: string
+          room_id?: string | null
+          status?: Database["public"]["Enums"]["appointment_status"]
+          symptoms?: string | null
+          updated_at?: string
+        }
+        Update: {
+          appointment_date?: string
+          appointment_time?: string
+          consultation_type?: Database["public"]["Enums"]["consultation_type"]
+          created_at?: string
+          doctor_id?: string
+          id?: string
+          notes?: string | null
+          patient_id?: string
+          room_id?: string | null
+          status?: Database["public"]["Enums"]["appointment_status"]
+          symptoms?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctor_availability: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          doctor_id: string
+          end_time: string
+          id: string
+          start_time: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          doctor_id: string
+          end_time: string
+          id?: string
+          start_time: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          doctor_id?: string
+          end_time?: string
+          id?: string
+          start_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_availability_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctors: {
+        Row: {
+          bio: string | null
+          consultation_fee: number | null
+          created_at: string
+          experience_years: number | null
+          id: string
+          is_accepting_emergency: boolean | null
+          is_available: boolean | null
+          qualification: string
+          qualification_document_url: string | null
+          specialization: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bio?: string | null
+          consultation_fee?: number | null
+          created_at?: string
+          experience_years?: number | null
+          id?: string
+          is_accepting_emergency?: boolean | null
+          is_available?: boolean | null
+          qualification: string
+          qualification_document_url?: string | null
+          specialization: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bio?: string | null
+          consultation_fee?: number | null
+          created_at?: string
+          experience_years?: number | null
+          id?: string
+          is_accepting_emergency?: boolean | null
+          is_available?: boolean | null
+          qualification?: string
+          qualification_document_url?: string | null
+          specialization?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      emergency_requests: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          doctor_id: string | null
+          id: string
+          patient_id: string
+          room_id: string | null
+          status: string
+          symptoms: string
+          urgency_level: number | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          doctor_id?: string | null
+          id?: string
+          patient_id: string
+          room_id?: string | null
+          status?: string
+          symptoms: string
+          urgency_level?: number | null
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          doctor_id?: string | null
+          id?: string
+          patient_id?: string
+          room_id?: string | null
+          status?: string
+          symptoms?: string
+          urgency_level?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "emergency_requests_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string
+          id: string
+          is_doctor: boolean | null
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name: string
+          id?: string
+          is_doctor?: boolean | null
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          is_doctor?: boolean | null
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +232,13 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      appointment_status:
+        | "pending"
+        | "confirmed"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+      consultation_type: "scheduled" | "emergency"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +365,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      appointment_status: [
+        "pending",
+        "confirmed",
+        "in_progress",
+        "completed",
+        "cancelled",
+      ],
+      consultation_type: ["scheduled", "emergency"],
+    },
   },
 } as const
